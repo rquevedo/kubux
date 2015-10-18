@@ -1,0 +1,25 @@
+# Python + Eclipse
+*.pyc
+*.pyd
+*.~
+*.class
+*.pyc
+*.pyo
+.project
+.pydevproject
+*.*~*
+*.*.orig
+*.bak
+.project
+.pydevproject
+.settings/
+.DS_Store
+# Git cacharra
+*.orig
+# sqlite3
+*.db
+/backups/
+*.py~
+.idea/
+/utiles/
+/cubes/

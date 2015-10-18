@@ -1,0 +1,149 @@
+	<nav class="navbar navbar-default" role="navigation" id="toolbar" ng-controller="ViewerNavigatorControler">
+          <ul class="nav navbar-nav">
+            <li class="cv-select">
+            <select class="model" ng-model="selected_model" ng-options="model.label for model in models"
+            ng-change="readCubes()">
+              <option value="" disabled selected>Model</option>
+            </select>
+            <!--<div class="btn-group">
+			  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+			    Model <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" >
+			    <li ng-model="selected_model" ng-repeat="model in models"
+			    ng-click="readCubes()"><a href="#">{{ model.name }}</a></li>
+			  </ul>
+			</div>
+			<div class="btn-group">
+			  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+			    Cube <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" >
+			    <li ng-model="selected_cube" ng-repeat="model in models"><a href="#">{{ cube.name }}</a></li>
+			  </ul>
+			</div>-->
+            <select class="cube" ng-model="selected_cube" ng-options="cube.name for cube in cubes"
+             ng-change="readDimensions()">
+              <option value="" disabled selected>Cube</option>
+            </select>
+            </li>
+            <li ng-click="get_nav_action('table')">Table</li>
+            <li ng-click="get_nav_action('bar')">Bar</li>
+            <li ng-click="get_nav_action('line')">Line</li>
+            <li ng-click="get_nav_action('bullet')">Bullet</li>
+            <li ng-click="get_nav_action('pie')">Pie</li>
+            <li><a href="#" class="icon attribute">Attribute</a></li>
+            <li><a href="#" class="icon measure">Measure</a></li>
+            <li><a href="#" class="icon export">Export</a></li>
+            <li><a href="#" class="icon import">Import</a></li>
+            <li class="disabled"><a href="#" class="icon delete">Delete</a></li>
+          </ul>
+      </nav>
+
+    <div id="bottom" ng-controller="ViewerBottomControler" set-bottom-height>
+    	<div class="left" ng-controller="ViewerBottomLeftControler">
+			<ul bitree >
+				<li on-repeat-done="dimension" ng-model="dimensions" ng-repeat="dimension in dimensions"><a >{{ dimension.label }}</a>
+					<ul>
+						<li on-repeat-done="hierarchy" ng-repeat="hierarchy in dimension.hierarchies">
+							<a >{{ hierarchy.label }}</a>
+							<ul>
+								<li on-repeat-done="level" lvl-draggable="true"
+								dnd-data="{dimension : '{{dimension.name}}', hierarchy : '{{hierarchy.name}}',level : '{{level}}',type : 'level', label : '{{ get_level_label(dimension.levels,level) }}'}" 
+								ng-repeat="level in hierarchy.levels"><a >{{ get_level_label(dimension.levels,level) }}</a></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li on-repeat-done="measure" lvl-draggable="true"
+				dnd-data="{name: '{{agg.name}}', type: 'measure', label : '{{ agg.label }}', measure_name: '{{agg.measure}}'}"
+				ng-repeat="agg in aggregates"><a>{{ agg.label }}</a></li>
+			</ul>		
+		</div>
+	
+		<div ng-controller="ViewerBottomRightControler" class="right">
+			<div class="droppable-area">
+				<div>
+					<a min-or-max-panel>Hide</a>
+				</div>
+				<div class="container-rows" ng-model="rows" lvl-drop-target="true" on-drop="dropped_element(data)" acepted-types="level">
+					<div>
+						<div ng-model="rows" ng-repeat='(row_index,row) in rows' class="dropped" lvl-draggable="true"
+						dnd-data="{dimension : '{{row.data.dimension}}', hierarchy : '{{row.data.hierarchy}}',level : '{{row.data.level}}', type : 'level', label: '{{ row.data.label }}'}" dnd-from-target="row_index" drop-position>
+		                    <p>{{row.data.label}}</p>
+		                    <a href="#" class="filter"></a>
+		                    <a ng-click="delete_row($index)" class="delete"></a>
+	                  	</div>
+					</div>
+					<p>Drop rows here</p>
+				</div>
+				<div class="container-columns" ng-model="columns" lvl-drop-target="true" on-drop="dropped_element(data)" acepted-types="level">
+					<div> 
+						<div ng-model="columns" ng-repeat='(column_index,column) in columns' class="dropped" lvl-draggable="true"
+						dnd-data="{dimension : '{{column.data.dimension}}', hierarchy : '{{column.data.hierarchy}}',level : '{{column.data.level}}', type: 'level', label : '{{ column.data.label }}'}" dnd-from-target="column_index" drop-position>
+		                    <p>{{column.data.label}}</p>
+		                    <a href="#" class="filter"></a>
+		                    <a ng-click="delete_column($index)" class="delete"></a>
+	                  	</div>
+					</div>
+					<p>Drop columns here</p>
+				</div>
+				<div class="container-measures" ng-model="aggregates" lvl-drop-target="true" on-drop="dropped_element(data)" acepted-types="measure">
+					<div> 
+						<div ng-model="aggregates" lvl-draggable="true" dnd-data="{name : '{{agg.name}}', type: 'measure', label : '{{ aggregates.data.label }}'}" ng-repeat='agg in aggregates'
+					  class="dropped" drop-position>
+		                    <p>{{agg.data.label}}</p>
+		                    <a href="#" class="filter"></a>
+		                    <a ng-click="delete_measure($index)" class="delete"></a>
+	                  	</div>
+					</div>
+					<p>Drop measures here</p>
+				</div>
+				<ul class="indicators">
+					<li><a href="#" class="icon-rows">Rows</a></li>
+					<li><a href="#" class="rows">{{rows.length}}</a></li>
+					<li><a href="#" class="icon-columns">Columns</a></li>
+					<li><a href="#" class="columns">{{columns.length}}</a></li>
+					<li><a href="#" class="icon-measures">Measures</a></li>
+					<li><a href="#" class="measures">{{aggregates.length}}</a></li>
+				</ul>
+			</div><!-- /droppable-area -->
+		
+			<div class="data-area">
+				<a toggle-filter-area class="glyphicon glyphicon-eye-close"></a>
+				<a toggle-filter-area>Filter Area</a>
+				<div class="filter-area" lvl-drop-target="true" on-drop="dropped_filter(data)" acepted-types="level"><!---->
+				  	<div class="filter" ng-model="filters" ng-repeat='(filter_index,filter) in filters'>
+				        <p>{{filter.level}}</p>
+				        <p>| </p>
+				        <a ng-click="delete_filter($index)">X</a>
+			      	</div>
+				</div>
+					
+					
+				<div content-manager adjust-content-manager-size class="content-manager">
+				
+				</div>
+	            </div><!-- /data-area ng-bind-html="pageContent" -->
+		</div><!-- /right -->
+	</div><!-- /bottom -->
+	
+	<div class="modal fade" id="myModal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title">Modal title</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>One fine body&hellip;</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+

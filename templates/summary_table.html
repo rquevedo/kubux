@@ -1,0 +1,17 @@
+<table {% if table_style %}class="{{table_style}}"{% endif %}>
+    <thead>
+        	<tr>
+            	{% for col in columns %}<th>{{col}}</th>{% endfor %}
+            </tr>
+    </thead>
+    <tbody>
+    {% for t in data %}<tr>
+    	{% if rows %}<th>{{rows[loop.index0]}}</th>{% endif %}
+        {% for tcell in t %}<td>{{tcell}}</td>{% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+
