@@ -1,0 +1,90 @@
+{
+    "name": "facturacion",
+    "label": "Facturación",
+    "dimensions": [
+        {
+         "name":"fecha",
+         "label":"Fecha",
+         "role":"time",
+         "levels": [
+                {
+                    "name":"anno",
+                    "label":"Año",
+                    "attributes": [{"name":"anno"}],
+                    "role":"year"
+                },
+                {
+                    "name":"mes",
+                    "label":"Mes",
+                    "attributes": [{"name":"mes"}, "mes_nombre"],
+                    "role":"month"
+                },
+                {
+                    "name":"dia",
+                    "label":"Día",
+                    "attributes": ["dia"],
+                    "role":"day"
+                }
+            ],
+            "hierarchies":[{"name":"DMA","label":"AMD","levels":["anno","mes","dia"]}]
+        },
+        {
+         "name":"cliente",
+         "label":"Cliente",
+         "levels": [
+                {
+                    "name":"nombre",
+                    "label":"Nombre",
+                    "attributes": ["nombre_entidad"]
+                }
+            ]
+        }
+    ],
+    "public_dimensions":[],
+    "cubes": [
+        {
+            "name": "facturacion",
+            "label": "Facturación",
+            "fact":"h_facturas",
+            "dimensions": ["fecha","cliente"],
+            "measures": [{"name":"importe", "label":"Importe"}],
+            "aggregates": [
+                    {
+                        "name": "importe_sum",
+                        "function": "sum",
+                        "measure": "importe",
+                        "label": "Importe"
+                    }
+            ],
+            "joins":[
+
+
+                { 
+                    "master": "h_facturas.codigo_entidad",
+                    "detail": {
+                        "schema": "comun",
+                        "table": "dim_cliente",
+                        "column": "x"
+                    }
+                },
+                { 
+                    "master": "h_facturas.id_fecha",
+                    "detail": {
+                        "schema": "comun",
+                        "table": "dim_fecha",
+                        "column": "id_fecha"
+                    }
+                }
+                
+            
+            ],
+            "mappings": {
+                          "cliente.nombre_entidad": {"schema":"comun","table":"dim_cliente","column":"nombre_entidad"},  
+                          "fecha.anno": {"schema":"comun","table":"dim_fecha","column":"anno"},
+                          "fecha.mes": {"schema":"comun","table":"dim_fecha","column":"mes"},
+                          "fecha.mes_nombre": {"schema":"comun","table":"dim_fecha","column":"mes_nombre"},
+                          "fecha.dia": {"schema":"comun","table":"dim_fecha","column":"dia"}
+                        }
+        }
+    ]
+}

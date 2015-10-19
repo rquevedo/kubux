@@ -86,7 +86,8 @@
                         "schema": "comun",
                         "table": "dim_fecha",
                         "column": "id_fecha"
-                    }
+                    },
+                    "method": "detail"
                 }
             
             ],

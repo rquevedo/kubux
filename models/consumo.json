@@ -1,0 +1,104 @@
+{
+	"name": "consumo_energetico",
+    "label": "Consumo Energético",
+    "dimensions": [
+        {
+         "name":"fecha",
+         "label":"Fecha",
+         "role":"time",
+         "levels": [
+                {
+                    "name":"anno",
+                    "label":"Año",
+                    "attributes": [{"name":"anno"}]
+                },
+                {
+                    "name":"anno_consumo",
+                    "label":"Año de consumo",
+                    "attributes": [{"name":"anno_consumo"}]
+                },
+                {
+                    "name":"mes",
+                    "label":"Mes",
+                    "attributes": [{"name":"mes"}, "mes_nombre"]
+                },
+                {
+                    "name":"dia",
+                    "label":"Día",
+                    "attributes": ["dia"]
+                },
+                {
+                    "name":"periodo_consumo",
+                    "label":"Período de consumo",
+                    "attributes": ["pc","pc_nombre"]
+                }
+            ],
+            "hierarchies":[{"name":"DMA","label":"DMA","levels":["anno","mes","dia"]},
+                            {"name":"DPCA","label":"APCD","levels":["anno_consumo","periodo_consumo","dia"]},
+                             {"name":"Mes","label":"Mes","levels":["periodo_consumo"]}],
+            "default_hierarchy_name":"DMA"
+        },
+        {
+         "name":"entidad",
+         "label":"Entidad",
+         "levels": [
+                {
+                    "name":"entidad",
+                    "label":"Entidad",
+                    "attributes": [{"name":"entityName"}]
+                }
+            ]
+        }
+    ],
+    "public_dimensions":[],
+    "cubes": [
+        {
+            "name": "consumo",
+            "label": "Consumo",
+            "fact":"fact_consumo",
+            "dimensions": ["fecha","entidad"],
+            "measures": [{"name":"kwh", "label":"Kilowats"},{"name":"importe_calc", "label":"Importe"}],
+            "aggregates": [
+                    {
+                        "name": "kwh_sum",
+                        "function": "sum",
+                        "measure": "kwh",
+                        "label": "KWH"
+                    },
+                    {
+                        "name": "kwh_avg",
+                        "function": "avg",
+                        "measure": "kwh",
+                        "label": "KWH AVG"
+                    },
+                    {
+                        "name": "importe_calc_sum",
+                        "function": "sum",
+                        "measure": "importe_calc",
+                        "label": "Import"
+                    }
+            ],
+            "joins":[
+
+                { 
+                    "master": "fact_consumo.id_fecha",
+                    "detail": {
+                        "schema": "comun",
+                        "table": "dim_fecha",
+                        "column": "id_fecha"
+                    }
+                }
+            
+            ],
+            "mappings": {
+                          "fecha.anno": {"schema":"comun","table":"dim_fecha","column":"anno"},
+                          "fecha.anno_consumo": {"schema":"comun","table":"dim_fecha","column":"anno_consumo"},
+                          "fecha.mes": {"schema":"comun","table":"dim_fecha","column":"mes"},
+                          "fecha.mes_nombre": {"schema":"comun","table":"dim_fecha","column":"mes_nombre"},
+                          "fecha.dia": {"schema":"comun","table":"dim_fecha","column":"dia"},
+                          "fecha.pc": {"schema":"comun","table":"dim_fecha","column":"mes_consumo"},
+                          "fecha.pc_nombre": {"schema":"comun","table":"dim_fecha","column":"mes_consumo_nombre"}
+                         }
+        }
+    ]
+}
