@@ -284,6 +284,7 @@ ViewerControllers.directive('bitree',['$rootScope' , function() {
   	
 	link: function( $scope, element, attributes ) {
 		
+		console.log('Directiva del bitree reportandose');
 		var bitree = function (element) {
 			
 			var $el = $(element);
@@ -496,4 +497,25 @@ ViewerControllers.directive('lvlDropTarget', ['$rootScope', function($rootScope)
 	         
 	        }
     	}
-	}]);
+}]);
+
+ViewerControllers.directive('btmodal',['$rootScope' , function($rootScope) {
+
+  return {
+  	
+	link: function( $scope, element, attributes ) {
+		
+		console.log('Directiva del modal reportandose');
+		$element = $(element)
+		
+	    $scope.$on('openModal', function( eventobject,data ) {
+        	
+        	console.log('entro al evento open modal');
+        	$element.modal();
+			
+		 } );
+		
+       }
+    }
+}]);
+

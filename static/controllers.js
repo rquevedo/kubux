@@ -60,13 +60,18 @@ ViewerControllers.controller('ViewerBottomControler', ['$scope','$http','$q',
     }
     
 ]);
-// ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q',
-//     function ($scope, $http,$q) {
+ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q',
+    function ($scope, $http,$q) {
+
+    	$scope.$on('modal_Changed', function(event, value) {
+	        $scope.$broadcast('openModal',{});
+	    });
+	    
     	
     	
-//     }
+    }
     
-// ]);
+]);
 ViewerControllers.controller('ViewerBottomLeftControler', ['$scope','$http','$q','get_data',
     function ($scope, $http,$q,get_data) {
     	
@@ -156,11 +161,15 @@ ViewerControllers.controller('ViewerBottomRightControler', ['$scope','$http','$q
 	    		$scope.$apply(function () {
 						
 					$scope.filters.push({level:data.data.label})
+					get_data.set('modal',true,true)
 				    
 				});
 	    	}
     		
 		
+		}
+		$scope.openmodal = function(index) {
+    		 get_data.set('modal',index,true)
 		}
 		// $scope.open = function (size) {
 

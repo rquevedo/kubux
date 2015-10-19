@@ -113,7 +113,7 @@
 				<a toggle-filter-area class="glyphicon glyphicon-eye-close"></a>
 				<a toggle-filter-area>Filter Area</a>
 				<div class="filter-area" lvl-drop-target="true" on-drop="dropped_filter(data)" acepted-types="level"><!---->
-				  	<div class="filter" ng-model="filters" ng-repeat='(filter_index,filter) in filters'>
+				  	<div class="filter" ng-model="filters" ng-repeat='(filter_index,filter) in filters' ng-click="openmodal($index)">
 				        <p>{{filter.level}}</p>
 				        <p>| </p>
 				        <a ng-click="delete_filter($index)">X</a>
@@ -128,7 +128,7 @@
 		</div><!-- /right -->
 	</div><!-- /bottom -->
 	
-	<div class="modal fade" id="myModal">
+	<div btmodal class="modal fade" id="myModal" ng-controller="FiltersModalControler">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
