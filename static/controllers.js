@@ -63,9 +63,30 @@ ViewerControllers.controller('ViewerBottomControler', ['$scope','$http','$q',
 ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q',
     function ($scope, $http,$q) {
 
+    	$scope.members = [];
     	$scope.$on('modal_Changed', function(event, value) {
-	        $scope.$broadcast('openModal',{});
+
+
+		  
+		  	var request = {}
+			request['cube'] = get_data.get('selected_cube').name
+		  
+		
+			var cube_request_result = $http.post('request_members',{data:request});
+
+        	$q.all([cube_request_result]).then(function(results){
+	            $scope.pageContent = results[0].data.data;//$sce.trustAsHtml(results[0].data.html);
+	            $scope.$broadcast('pageContentChange',{pageContent:$scope.pageContent,rows_count:$scope.rows.length,
+	            	columns_count:$scope.columns.length,formatter:request['formatter']});
+	
+	        });
+
+	         $scope.$broadcast('openModal',{});
 	    });
+
+	    $scope.done_dialog = function(data){
+	    	console.log("done dialog");
+	    }
 	    
     	
     	

@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, request, make_response
-from cubes import Workspace
+from cubes import Workspace,Cell
 from cubes import get_logger
 import json
 from collections import OrderedDict
@@ -65,6 +65,18 @@ def request_cube_data():
     request_data = json.loads(request.data)
     #result = ENGINE.manage_request(request.args)
     result = ENGINE.manage_request(request_data['data'])
+    return json.dumps(result)
+#    print request_data
+#    return "ok"
+
+@modeler.route("/request_cube_data", methods=["POST"])
+def request_filter_members():
+    request_data = json.loads(request.data)
+    #result = ENGINE.manage_request(request.args)
+    browser = WORKSPACE.browser(request['cube'].name)
+
+    cell = Cell(request['cube'].name, [])
+    members = browser.members(cell, request['dimension'],level=request['level'], hierarchy=request['hierarchy'])
     return json.dumps(result)
 #    print request_data
 #    return "ok"

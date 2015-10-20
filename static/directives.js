@@ -502,11 +502,23 @@ ViewerControllers.directive('lvlDropTarget', ['$rootScope', function($rootScope)
 ViewerControllers.directive('btmodal',['$rootScope' , function($rootScope) {
 
   return {
+
+  	scope: {
+        onclose: '&',
+        ondone:'&'
+    },
   	
 	link: function( $scope, element, attributes ) {
 		
 		console.log('Directiva del modal reportandose');
-		$element = $(element)
+		$element = $(element);
+		that = this;
+
+		$('.btn-primary').bind('click', function(e) {	
+			
+			console.log($scope.ondone);	
+			$scope.ondone({'test':1});	
+		});
 		
 	    $scope.$on('openModal', function( eventobject,data ) {
         	
