@@ -1,7 +1,8 @@
 
 from flask import Flask, render_template, request, make_response
-from cubes import Workspace,Cell
+from cubes import Workspace
 from cubes import get_logger
+from cubes.cells import Cell, PointCut, SetCut, RangeCut
 import json
 from collections import OrderedDict
 from olap_engine import engine
@@ -69,17 +70,20 @@ def request_cube_data():
 #    print request_data
 #    return "ok"
 
-@modeler.route("/request_cube_data", methods=["POST"])
+@modeler.route("/request_members", methods=["POST"])
 def request_filter_members():
     request_data = json.loads(request.data)
-    #result = ENGINE.manage_request(request.args)
-    browser = WORKSPACE.browser(request['cube'].name)
+    cube = WORKSPACE.cube(request_data['cube'])
 
-    cell = Cell(request['cube'].name, [])
-    members = browser.members(cell, request['dimension'],level=request['level'], hierarchy=request['hierarchy'])
-    return json.dumps(result)
-#    print request_data
-#    return "ok"
+    browser = WORKSPACE.browser(cube)
+
+
+    cell = Cell(cube, [])
+    members = browser.members(cell, request_data['dimension'],level=request_data['level'], hierarchy=request_data['hierarchy'])
+
+    for m in members:
+        print m
+    #return json.dumps(members)
 
 def run_modeler(config_file, port=5000):
     

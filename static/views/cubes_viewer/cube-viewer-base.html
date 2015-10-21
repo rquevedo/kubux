@@ -114,7 +114,7 @@
 				<a toggle-filter-area>Filter Area</a>
 				<div class="filter-area" lvl-drop-target="true" on-drop="dropped_filter(data)" acepted-types="level"><!---->
 				  	<div class="filter" ng-model="filters" ng-repeat='(filter_index,filter) in filters' ng-click="openmodal($index)">
-				        <p>{{filter.level}}</p>
+				        <p>{{filter.data.label}}</p>
 				        <p>| </p>
 				        <a ng-click="delete_filter($index)"></a>
 			      	</div>
