@@ -60,24 +60,20 @@ ViewerControllers.controller('ViewerBottomControler', ['$scope','$http','$q',
     }
     
 ]);
-ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q',
-    function ($scope, $http,$q) {
+ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q','get_data',
+    function ($scope, $http,$q,get_data) {
 
     	$scope.members = [];
-    	$scope.$on('modal_Changed', function(event, value) {
+    	$scope.$on('modal_Changed', function(event, data) {
 
 
-		  
-		  	var request = {}
-			request['cube'] = get_data.get('selected_cube').name
+			data['cube'] = get_data.get('selected_cube').name
 		  
 		
-			var cube_request_result = $http.post('request_members',{data:request});
+			var cube_request_result = $http.post('request_members',data);
 
         	$q.all([cube_request_result]).then(function(results){
-	            $scope.pageContent = results[0].data.data;//$sce.trustAsHtml(results[0].data.html);
-	            $scope.$broadcast('pageContentChange',{pageContent:$scope.pageContent,rows_count:$scope.rows.length,
-	            	columns_count:$scope.columns.length,formatter:request['formatter']});
+	            console.log(results);
 	
 	        });
 
@@ -178,11 +174,11 @@ ViewerControllers.controller('ViewerBottomRightControler', ['$scope','$http','$q
 
 		$scope.dropped_filter = function(data) {
     		
-    		if(!utils.inArray({level:data.data.label},$scope.filters,'level')){
+    		if(!utils.inArray({data:data.data},$scope.filters,'data')){
 	    		$scope.$apply(function () {
 						
-					$scope.filters.push({level:data.data.label})
-					get_data.set('modal',true,true)
+					$scope.filters.push({data:data.data})
+					get_data.set('modal',data.data,true)
 				    
 				});
 	    	}
