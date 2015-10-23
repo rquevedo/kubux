@@ -64,9 +64,10 @@ ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q','ge
     function ($scope, $http,$q,get_data) {
 
     	$scope.members = [];
-    	$scope.$on('modal_Changed', function(event, data) {
+    	$scope.$on('modal_Changed', function(event, index) {
 
-
+    		console.log(index);
+    		data = get_data.get('filters')[index].data
 			data['cube'] = get_data.get('selected_cube').name
 		  
 		
@@ -179,7 +180,8 @@ ViewerControllers.controller('ViewerBottomRightControler', ['$scope','$http','$q
 	    		$scope.$apply(function () {
 						
 					$scope.filters.push({data:data.data})
-					get_data.set('modal',data.data,true)
+					get_data.set('filters',$scope.filters,false)
+					get_data.set('modal',$scope.filters.length -1,true)
 				    
 				});
 	    	}

@@ -510,19 +510,25 @@ ViewerControllers.directive('btmodal',['$rootScope' , function($rootScope) {
   	
 	link: function( $scope, element, attributes ) {
 		
-		console.log('Directiva del modal reportandose');
 		$element = $(element);
-		that = this;
+
+		var get_rows_selected = function(){
+			var selected = [];
+			$rows = $(' table tr.datatable-el-selected',$element)
+		    $rows.each(function( index ) {
+		    	console.log($(this).attr('key'));
+		      //selected.push();
+		    });
+		};
 
 		$('.btn-primary').bind('click', function(e) {	
 			
-			console.log($scope.ondone);	
+			get_rows_selected();
 			$scope.ondone({'test':1});	
 		});
 		
 	    $scope.$on('openModal', function( eventobject,data ) {
         	
-        	console.log('entro al evento open modal');
         	$element.modal();
 			
 		 } );
@@ -537,32 +543,35 @@ ViewerControllers.directive('datatable',['$rootScope' , function($rootScope) {
   	
 	link: function( $scope, element, attributes ) {
 		
-		$element = $(element);
+		$datatable_element = $(element);
 		that = this;
 
 		$scope.$on('show_datatable', function( eventobject,data ) {
         	
-        	$element.html('');
-        	console.log($element);
-        	console.log(data);
-			$element.html(data);
-			// $table = $('> table',this.$contentManagerElement);
-			// this.otable = $table.dataTable({
+        	$datatable_element.html('');
+			$datatable_element.html(data);
+			$table = $('> table',$datatable_element);
+			this.otable = $table.dataTable({
 			   	
-			//     "sScrollY": "1px",
-			// 	"bPaginate": false,
-			// 	//"bSort": false,
-			// 	"sScrollX": "100%",
-			// 	"bScrollCollapse": true,
-			// 	"bSortClasses": false,
-			// 	//"dom": 'T<"clear">lfrtip',
-			// 	//"bScrollInfinite": true
-			// 	//"sDom": "frtiS",
-			// 	//"bDeferRender": true
+			   	"scrollY": "200px",
+			    "bSortClasses": false,
+                "processing": true,
+                "sDom": "frtiS",
+                "DeferRender": true,
+				"oLanguage": {
+                                "sZeroRecords": "No se encontraron elementos",
+                                "sInfo": "Mostrando del _START_ al _END_ de _TOTAL_ elementos",
+                                "sInfoEmpty": "Mostrando del 0 al 0 de 0 elementos",
+                                "sInfoFiltered": "(filtrados de _MAX_ elementos)",
+                                'sSearch': "Buscar",
+                            },
 				
 				
 			   	
-		 //    });
+		    });
+		    $table.on('click', 'tr', function () {
+		        $(this).toggleClass('datatable-el-selected');
+		    } );
 			
 		 } );
 

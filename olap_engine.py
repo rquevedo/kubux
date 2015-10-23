@@ -94,7 +94,7 @@ class engine():
 
     def format_to_filter_html_table(self, members, dimension, hierarchy, level):
 
-        formatter = FilterTableFormatter(table_style="table table-striped table-bordered table-hover table-condensed")
+        formatter = FilterTableFormatter(table_style="table table-bordered table-condensed")
         html_result = formatter.format(members, dimension, hierarchy, level)
         html_result = re.sub(r'[\t\n\r]', '', html_result)
         return html_result

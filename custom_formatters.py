@@ -30,8 +30,10 @@ class FilterTableFormatter(Formatter):
         
         levels = hierarchy.levels_for_depth(hierarchy.level_index(level) + 1)
         pattern = '/'.join(['%%(%s)s' % (hlevel.label_attribute.ref) for hlevel in levels])
+        key_pattern = '~'.join(['%%(%s)s' % (hlevel.key.ref) for hlevel in levels])
         
-        labels = [pattern % member for member in members]
+        labels = [(pattern % member,key_pattern % member) for member in members]
+        print labels
 
 
         output = self.template.render(labels=labels, level_label=level.label,

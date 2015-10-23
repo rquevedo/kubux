@@ -5,7 +5,7 @@
             </tr>
     </thead>
     <tbody>
-    {% for label in labels %}<tr>
+    {% for label,key in labels %}<tr key="{{key}}">
     	<td>{{label}}</td>
     </tr>
     {% endfor %}
