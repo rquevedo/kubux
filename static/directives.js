@@ -531,3 +531,42 @@ ViewerControllers.directive('btmodal',['$rootScope' , function($rootScope) {
     }
 }]);
 
+ViewerControllers.directive('datatable',['$rootScope' , function($rootScope) {
+
+  return {
+  	
+	link: function( $scope, element, attributes ) {
+		
+		$element = $(element);
+		that = this;
+
+		$scope.$on('show_datatable', function( eventobject,data ) {
+        	
+        	$element.html('');
+        	console.log($element);
+        	console.log(data);
+			$element.html(data);
+			// $table = $('> table',this.$contentManagerElement);
+			// this.otable = $table.dataTable({
+			   	
+			//     "sScrollY": "1px",
+			// 	"bPaginate": false,
+			// 	//"bSort": false,
+			// 	"sScrollX": "100%",
+			// 	"bScrollCollapse": true,
+			// 	"bSortClasses": false,
+			// 	//"dom": 'T<"clear">lfrtip',
+			// 	//"bScrollInfinite": true
+			// 	//"sDom": "frtiS",
+			// 	//"bDeferRender": true
+				
+				
+			   	
+		 //    });
+			
+		 } );
+
+		
+       }
+    }
+}]);

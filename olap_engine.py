@@ -1,7 +1,7 @@
 
 import cubes
 from cubes.formatters import HTMLCrossTableFormatter
-from custom_formatters import SummaryTableFormatter,GraphFormatter
+from custom_formatters import SummaryTableFormatter,GraphFormatter,FilterTableFormatter
 import re
 
 class engine():
@@ -65,19 +65,13 @@ class engine():
                 , table_style="table table-striped table-bordered table-hover table-condensed")
         	html_result = formatter.format(result, aggregates=request_object['aggregates']['labels'])
         else:
-            # for r in result:
-            #     print r
-	        formatter = HTMLCrossTableFormatter(table_style="table table-striped table-bordered table-hover table-condensed")
-	        html_result = formatter.format('some_cube',result, request_object['onrows']['labels'], request_object['oncolumns']['labels']
-                , request_object['aggregates']['labels'],aggregates_on="columns")
+            
+            html_result = self.format_to_html_table('some_cube',result, request_object['onrows']['labels'], request_object['oncolumns']['labels']
+                , request_object['aggregates']['labels'],aggregates_on="columns");
 
-        #remove \n and \t
-        html_result = re.sub(r'[\t\n\r]', '', html_result)
         return {'data':html_result}
     
     def manage_request_graph(self, request_data):
-
-        print "graficoooooooooo"
 
         request_object = self.get_request_object(request_data)
 
@@ -90,4 +84,18 @@ class engine():
         series_result = formatter.format(result,request_object)
         print series_result
         return {'data':series_result}
+
+    def format_to_html_table(self,cube,result,onrows,oncolumns,agregates=None,aggregates_on=None):
+
+        formatter = HTMLCrossTableFormatter(table_style="table table-striped table-bordered table-hover table-condensed")
+        html_result = formatter.format(cube,result, onrows, oncolumns, agregates,aggregates_on)
+        html_result = re.sub(r'[\t\n\r]', '', html_result)
+        return html_result
+
+    def format_to_filter_html_table(self, members, dimension, hierarchy, level):
+
+        formatter = FilterTableFormatter(table_style="table table-striped table-bordered table-hover table-condensed")
+        html_result = formatter.format(members, dimension, hierarchy, level)
+        html_result = re.sub(r'[\t\n\r]', '', html_result)
+        return html_result
 

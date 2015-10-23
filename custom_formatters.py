@@ -12,6 +12,32 @@ def _jinja_env():
     env = jinja2.Environment(loader=loader)
     return env
 
+class FilterTableFormatter(Formatter):
+    
+    mime_type = "text/html"
+
+    def __init__(self, table_style=None):
+
+
+        super(FilterTableFormatter, self).__init__()
+
+        self.env = _jinja_env()
+        self.template = self.env.get_template("filter_table.html")
+        self.table_style = table_style
+
+    def format(self, members, dimension, hierarchy, level):
+
+        
+        levels = hierarchy.levels_for_depth(hierarchy.level_index(level) + 1)
+        pattern = '/'.join(['%%(%s)s' % (hlevel.label_attribute.ref) for hlevel in levels])
+        
+        labels = [pattern % member for member in members]
+
+
+        output = self.template.render(labels=labels, level_label=level.label,
+                                      table_style=self.table_style)
+        return output
+
 class SummaryTableFormatter(Formatter):
     parameters = [
                 {

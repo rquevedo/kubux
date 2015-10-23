@@ -1,0 +1,16 @@
+<table {% if table_style %}class="{{table_style}}"{% endif %}>
+    <thead>
+        	<tr>
+            	<th>{{level_label}}</th>
+            </tr>
+    </thead>
+    <tbody>
+    {% for label in labels %}<tr>
+    	<td>{{label}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+

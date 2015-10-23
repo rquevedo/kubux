@@ -74,6 +74,9 @@ def request_cube_data():
 def request_filter_members():
     request_data = json.loads(request.data)
     cube = WORKSPACE.cube(request_data['cube'])
+    dimension = cube.dimension(request_data['dimension'])
+    hierarchy = dimension.hierarchy(request_data['hierarchy'])
+    level = dimension.level(request_data['level'])
 
     browser = WORKSPACE.browser(cube)
 
@@ -81,9 +84,9 @@ def request_filter_members():
     cell = Cell(cube, [])
     members = browser.members(cell, request_data['dimension'],level=request_data['level'], hierarchy=request_data['hierarchy'])
 
-    for m in members:
-        print m
-    #return json.dumps(members)
+    html = ENGINE.format_to_filter_html_table(members, dimension, hierarchy, level)
+
+    return html
 
 def run_modeler(config_file, port=5000):
     
