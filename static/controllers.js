@@ -75,7 +75,7 @@ ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q','ge
 
         	$q.all([cube_request_result]).then(function(results){
 	            $scope.$broadcast('show_datatable',results[0].data);
-	            $scope.$broadcast('openModal',{});
+	            $scope.$broadcast('openModal',{'index':index});
 	
 	        });
 
@@ -83,7 +83,13 @@ ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q','ge
 	    });
 
 	    $scope.done_dialog = function(data){
-	    	console.log("done dialog");
+
+	    	filters = get_data.get('filters')
+	    	datafilter = filters[data.index].data
+	    	datafilter['data'] = data
+	    	filters[data.index]['data'] = datafilter
+	    	get_data.set('filters',filters,true);
+
 	    }
 	    
     	
@@ -134,6 +140,8 @@ ViewerControllers.controller('ViewerBottomRightControler', ['$scope','$http','$q
     	$scope.columns = [];
     	$scope.aggregates = [];
     	$scope.filters = [];
+
+    	get_data.set('filters',$scope.filters,false)
     	
     	$scope.dropped_element = function(data) {
     		
@@ -229,6 +237,7 @@ ViewerControllers.controller('ViewerBottomRightControler', ['$scope','$http','$q
 			request['cube'] = get_data.get('selected_cube').name
 			request['model'] = get_data.get('selected_model').position
 			request['formatter'] = get_data.get('view_mode')
+			request['filters'] = get_data.get('filters')
 			return request
 		  
 		}
@@ -236,6 +245,7 @@ ViewerControllers.controller('ViewerBottomRightControler', ['$scope','$http','$q
 
 			
 			var request = make_request_object();
+			console.log(request);
 			var cube_request_result = $http.post('request_cube_data',{data:request});
 
         	$q.all([cube_request_result]).then(function(results){
@@ -248,6 +258,9 @@ ViewerControllers.controller('ViewerBottomRightControler', ['$scope','$http','$q
 		}
 
 		$scope.$on('view_mode_Changed', function(event, value) {
+	        request_cube_data();
+	    });
+	    $scope.$on('filters_Changed', function(event, value) {
 	        request_cube_data();
 	    });
     	

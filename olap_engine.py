@@ -2,6 +2,7 @@
 import cubes
 from cubes.formatters import HTMLCrossTableFormatter
 from custom_formatters import SummaryTableFormatter,GraphFormatter,FilterTableFormatter
+from cubes.cells import Cell, PointCut, SetCut, RangeCut
 import re
 
 class engine():
@@ -50,14 +51,25 @@ class engine():
         
     def manage_request(self, request_data):
         
+        cell = self.manage_filters(request_data['filters'],request_data['cube'])
+        request_data['cell'] = cell
         return self.formatters[request_data['formatter']](request_data)
+
+    def manage_filters(self,filters,cube):
+
+        cube = self.WORKSPACE.cube(cube)
+        cuts = [
+            #RangeCut("fecha","2yearsago","today")
+        ]
+        cell = Cell(cube, cuts)
+        return cell
         
         
     def manage_request_table(self, request_data):
         
         request_object = self.get_request_object(request_data)
         
-        result = request_object['browser'].aggregate(drilldown=request_object['drilldown_list']
+        result = request_object['browser'].aggregate(request_data['cell'], drilldown=request_object['drilldown_list']
             , aggregates=request_object['aggregates']['labels'], include_summary=True)
         
         if not request_object['drilldown_list']:
@@ -75,7 +87,7 @@ class engine():
 
         request_object = self.get_request_object(request_data)
 
-        result = request_object['browser'].aggregate(drilldown=request_object['drilldown_list']
+        result = request_object['browser'].aggregate(request_data['cell'], drilldown=request_object['drilldown_list']
             , aggregates=request_object['aggregates']['labels'], include_summary=False)
 
 

@@ -511,25 +511,28 @@ ViewerControllers.directive('btmodal',['$rootScope' , function($rootScope) {
 	link: function( $scope, element, attributes ) {
 		
 		$element = $(element);
+		var index = null;
 
 		var get_rows_selected = function(){
 			var selected = [];
 			$rows = $(' table tr.datatable-el-selected',$element)
 		    $rows.each(function( index ) {
-		    	console.log($(this).attr('key'));
-		      //selected.push();
+		      	selected.push($(this).attr('key'));
 		    });
+		    return selected;
 		};
 
 		$('.btn-primary').bind('click', function(e) {	
 			
-			get_rows_selected();
-			$scope.ondone({'test':1});	
+			filters = get_rows_selected();
+			$scope.ondone({data:{'filters':filters,'index':index}});	
 		});
 		
 	    $scope.$on('openModal', function( eventobject,data ) {
         	
         	$element.modal();
+        	index = data.index;
+
 			
 		 } );
 		

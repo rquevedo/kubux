@@ -64,6 +64,8 @@ def get_measure_list_by_cube(name):
 @modeler.route("/request_cube_data", methods=["POST"])
 def request_cube_data():
     request_data = json.loads(request.data)
+    print "dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa %s " % request_data
+    print "tesssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
     #result = ENGINE.manage_request(request.args)
     result = ENGINE.manage_request(request_data['data'])
     return json.dumps(result)
