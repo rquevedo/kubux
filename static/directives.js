@@ -515,13 +515,14 @@ ViewerControllers.directive('btmodal',['$rootScope' , function($rootScope) {
 
 		var get_rows_selected = function(){
 			var selected = [];
-			var label = "Incluir: ";
+			var labels = []
 			$rows = $(' table tr.datatable-el-selected',$element)
 		    $rows.each(function( index ) {
 		    	key = $(this).attr('key');
 		      	selected.push(key);
-		      	label+= ','+ $('> td',this).text();
+		      	labels.push($('> td',this).text());
 		    });
+		    var label = "Incluir: " + labels.join(',');
 		    return {'keys':selected,'label':label};
 		};
 
@@ -529,6 +530,9 @@ ViewerControllers.directive('btmodal',['$rootScope' , function($rootScope) {
 			
 			filters = get_rows_selected();
 			$scope.ondone({data:{'filters':filters,'index':index}});	
+			$element.modal('hide')
+
+
 		});
 		
 	    $scope.$on('openModal', function( eventobject,data ) {
@@ -556,6 +560,7 @@ ViewerControllers.directive('datatable',['$rootScope' , function($rootScope) {
         	
         	$datatable_element.html('');
 			$datatable_element.html(data['table']);
+			console.log(data['keys']);
 			$table = $('> table',$datatable_element);
 			this.otable = $table.dataTable({
 			   	
@@ -578,6 +583,14 @@ ViewerControllers.directive('datatable',['$rootScope' , function($rootScope) {
 		    $table.on('click', 'tr', function () {
 		        $(this).toggleClass('datatable-el-selected');
 		    } );
+
+		    jQuery.each(data['keys'], function(index, value) {
+		    	console.log("clase por defecto");
+		    	console.log(value);
+		    	console.log($table);
+		    	console.log($('tr[key="' + value + '"]',$table));
+			    $('tr[key="' + value + '"]',$table).addClass("datatable-el-selected");
+			});
 			
 		 } );
 

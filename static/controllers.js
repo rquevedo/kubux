@@ -71,9 +71,12 @@ ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q','ge
 		  
 		
 			var cube_request_result = $http.post('request_members',data);
-
+			var keys = []
+			if ('data' in data){
+				keys = data['data']['filters']['keys'];
+			}
         	$q.all([cube_request_result]).then(function(results){
-	            $scope.$broadcast('show_datatable',{'table':results[0].data,'keys':data['filters']['keys']});
+	            $scope.$broadcast('show_datatable',{'table':results[0].data,'keys':keys});
 	            $scope.$broadcast('openModal',{'index':index});
 	
 	        });
