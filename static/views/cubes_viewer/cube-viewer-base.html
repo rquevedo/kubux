@@ -116,6 +116,7 @@
 				  	<div class="filter" ng-model="filters" ng-repeat='(filter_index,filter) in filters' ng-click="openmodal($index)">
 				        <p>{{filter.data.label}}</p>
 				        <p>| </p>
+				        <p>{{filter.data.data.filters.label}}</p>
 				        <a ng-click="delete_filter($index)"></a>
 			      	</div>
 				</div>

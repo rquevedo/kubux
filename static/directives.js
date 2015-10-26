@@ -515,11 +515,14 @@ ViewerControllers.directive('btmodal',['$rootScope' , function($rootScope) {
 
 		var get_rows_selected = function(){
 			var selected = [];
+			var label = "Incluir: ";
 			$rows = $(' table tr.datatable-el-selected',$element)
 		    $rows.each(function( index ) {
-		      	selected.push($(this).attr('key'));
+		    	key = $(this).attr('key');
+		      	selected.push(key);
+		      	label+= ','+ $('> td',this).text();
 		    });
-		    return selected;
+		    return {'keys':selected,'label':label};
 		};
 
 		$('.btn-primary').bind('click', function(e) {	
@@ -552,7 +555,7 @@ ViewerControllers.directive('datatable',['$rootScope' , function($rootScope) {
 		$scope.$on('show_datatable', function( eventobject,data ) {
         	
         	$datatable_element.html('');
-			$datatable_element.html(data);
+			$datatable_element.html(data['table']);
 			$table = $('> table',$datatable_element);
 			this.otable = $table.dataTable({
 			   	

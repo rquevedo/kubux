@@ -66,7 +66,6 @@ ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q','ge
     	$scope.members = [];
     	$scope.$on('modal_Changed', function(event, index) {
 
-    		console.log(index);
     		data = get_data.get('filters')[index].data
 			data['cube'] = get_data.get('selected_cube').name
 		  
@@ -74,7 +73,7 @@ ViewerControllers.controller('FiltersModalControler', ['$scope','$http','$q','ge
 			var cube_request_result = $http.post('request_members',data);
 
         	$q.all([cube_request_result]).then(function(results){
-	            $scope.$broadcast('show_datatable',results[0].data);
+	            $scope.$broadcast('show_datatable',{'table':results[0].data,'keys':data['filters']['keys']});
 	            $scope.$broadcast('openModal',{'index':index});
 	
 	        });
@@ -226,7 +225,7 @@ ViewerControllers.controller('ViewerBottomRightControler', ['$scope','$http','$q
 		$scope.delete_filter = function(index) {
     		
 		    $scope.filters.splice(index,1);
-		    //request_cube_data();
+		    request_cube_data();
 		}
 		make_request_object = function () {
 		  

@@ -58,9 +58,10 @@ class engine():
     def manage_filters(self,filters,cube):
 
         cube = self.WORKSPACE.cube(cube)
-        cuts = [
-            #RangeCut("fecha","2yearsago","today")
-        ]
+        cuts = []
+        for f in filters:
+            cut = SetCut(f['data']['dimension'], [key.split('~') for key in f['data']['data']['filters']['keys']],f['data']['hierarchy'])
+            cuts.append(cut)
         cell = Cell(cube, cuts)
         return cell
         

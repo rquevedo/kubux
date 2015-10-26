@@ -318,7 +318,7 @@
 	margin-bottom: 0;
 }
 .filter-area .filter > p {
-	max-width: 115px;
+	/*max-width: 115px;*/
 	overflow: hidden;
 	float: left;
 	text-overflow: ellipsis;
