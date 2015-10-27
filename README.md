@@ -1,1 +1,2 @@
-# cubes_viewer
+Python based BI suite. Currently only a cubes viewer
+
